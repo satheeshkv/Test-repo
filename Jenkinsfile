@@ -30,7 +30,7 @@ pipeline {
                            }
                             stage('Integration test') {
                                steps {
-                                echo "Running the integration test..."
+                                sh ls -rlth 
                               }
                            }
                            }
