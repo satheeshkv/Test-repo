@@ -30,7 +30,7 @@ pipeline {
                            }
                             stage('Integration test') {
                                steps {
-                                sh ls -rlth 
+                                sh 'ls -rlth'
                               }
                            }
                            }
