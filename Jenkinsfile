@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                 sh 'ps -ef | grep httpd'
+                 args -t http-jenkins
                 
             }
         }
