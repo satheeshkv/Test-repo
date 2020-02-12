@@ -1,3 +1,3 @@
 FROM httpd
 
-RUN add -U subversion
+RUN useradd -U subversion
