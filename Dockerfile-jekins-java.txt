@@ -1,0 +1,54 @@
+FROM openjdk:8-jdk
+
+ARG user=jenkins
+ARG group=jenkins
+#ARG uid=1000
+#ARG gid=1000
+ARG http_port=8080
+ARG agent_port=50000
+
+ENV JENKINS_HOME /var/jenkins_home
+ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
+
+# Jenkins home directory is a volume, so configuration and build history
+# can be persisted and survive image upgrades
+VOLUME jenkins-dir
+
+# Jenkins is run with user `jenkins`, uid = 1000
+# If you bind mount a volume from the host or a data container,
+# ensure you use the same uid
+#RUN groupadd -g ${gid} ${group} \
+#&& useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+
+
+# jenkins version being bundled in this docker image
+ARG JENKINS_VERSION
+ENV JENKINS_VERSION ${JENKINS_VERSION:-2.60.3}
+
+# jenkins.war checksum, download will be validated using it
+#ARG JENKINS_SHA=2d71b8f87c8417f9303a73d52901a59678ee6c0eefcf7325efed6035ff39372a
+
+# Can be used to customize where jenkins.war get downloaded from
+RUN mkdir -p  /var/jenkins_home
+ARG JENKINS_URL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
+
+# could use ADD but this one does not check Last-Modified header neither does it allow to control checksum
+# see https://github.com/docker/docker/issues/8331
+RUN curl -fsSL ${JENKINS_URL} -o /var/jenkins_home/jenkins.war
+RUN ls -rlth /var/jenkins_home/jenkins.war
+
+# for main web interface:
+EXPOSE ${http_port}
+EXPOSE ${agent_port}
+
+#USER ${user}
+
+#COPY jenkins.sh /var/jenkins_home/
+#RUN ls -rlth /var/jenkins_home/jenkins.sh
+#RUN chmod -R 777 /var/jenkins_home
+#RUN  /var/jenkins_home/jenkins.sh
+#ENTRYPOINT  ["java -jar /var/jenkins_home/jenkins.war"]
+
+#RUN  java -jar /var/jenkins_home/jenkins.war &
+#RUN java -jar /var/jenkins_home/jenkins.war & sleep 5
+CMD ["java", "-jar", "/var/jenkins_home/jenkins.war"]

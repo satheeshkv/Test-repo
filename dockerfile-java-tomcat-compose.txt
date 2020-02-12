@@ -1,0 +1,15 @@
+version: '2'
+services:
+ jenkins:
+   image: jenkins:2.14
+   ports:
+     - "8080:8080"
+     - "50000:50000"
+   volumes:
+     - /opt/jenkins_home:/var/jenkins_home
+ javatomcat:
+   image: java8/tomcat:latest
+   ports:
+     - "8081:8080"
+   volumes:
+     - /opt/tomcat_dir:/usr/local/tomcat
