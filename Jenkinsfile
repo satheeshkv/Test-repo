@@ -3,8 +3,8 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh 'ps -ef | grep httpd'
-                sh 'docker image ls | grep httpd'
+                /bin/sh 'ps -ef | grep httpd'
+                /bin/sh 'docker image ls | grep httpd'
             }
         }
     }
