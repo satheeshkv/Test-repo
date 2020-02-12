@@ -1,0 +1,14 @@
+command to run container to bind socket so that it works as Docker In Docker
+
+below is the command
+
+Docker Run command to run container based on Image.
+
+docker run -itd -p 8080:8080 --name shit-jenkins -v jenkins-data1:/var/jenkins_home -v $(which docker):/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock  jenkins-updated
+
+
+
+
+
+
+
